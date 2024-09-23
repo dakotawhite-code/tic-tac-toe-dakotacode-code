@@ -4,7 +4,7 @@ public class tictactoe {
                                      {' ', ' ', ' '},
                                      {' ', ' ', ' '}};
     private static char player  = 'X';
-
+    
     private static boolean validspace(int input) {
         switch (input) {
             case 1: 
