@@ -1,32 +1,133 @@
-public class TicTacToe {
-    public static void  main(String[] args) {
-        char[][] board = {{' ', ' ', ' '},
-                          {' ', ' ', ' '},
-                          {' ', ' ', ' '}};
-        printBoard(board);
-        Scanner scan = new Scanner(System.in);
-        System.out.println("where");
-        String userInput = scan.nextLine();
-        System.out.println(userInput);
+import java.util.Scanner;
+public class tictactoe {
+    private static char[][] board = {{' ', ' ', ' '},
+                                     {' ', ' ', ' '},
+                                     {' ', ' ', ' '}};
+    private static char player  = 'X';
+
+    private static boolean validspace(int input) {
+        switch (input) {
+            case 1: 
+                return board[0][0] == ' ';
+            case 2: 
+                return board[0][1] == ' ';
+            case 3: 
+                return board[0][2] == ' ';
+            case 4: 
+                return board[1][0] == ' ';
+            case 5: 
+                return board[1][1] == ' ';
+            case 6: 
+                return board[1][2] == ' ';
+            case 7: 
+                return board[2][0] == ' ';
+            case 8: 
+                return board[2][1] == ' ';
+            case 9: 
+                return board[2][2] == ' ';
+            default: 
+                return false;
+        }
     }
-    private static void printBoard(char[][] board){
-        System.out.println(board[0][0] + "|" + board[0][1] + "|" + board[0][2]);
-        System.out.println("-+-+-");
-        System.out.println(board[1][0] + "|" + board[1][1] + "|" + board[1][2]);
-        System.out.println("-+-+-");
-        System.out.println(board[2][0] + "|" + board[2][1] + "|" + board[2][2]);
-    
-        switch(userInput){
-            case "1":
-                board[0][0] = 'X';
+
+    private static void turn(char[][] board, Scanner scan) {
+        int input;
+        while (true) {
+            System.out.print("Player " + player + ", enter your move (1-9): ");
+            if (scan.hasNextInt()) {
+                input = scan.nextInt();
+                if (validspace(input)) {
+                    move(input);
+                    break;
+                } else {
+                    System.out.println("That move is invalid! Try again.");
+                }
+            } else {
+                System.out.println("Invalid input! Please enter a number between 1 and 9.");
+                scan.next();
+            }
+        }
+    }
+
+    private static void move(int input) {
+        switch (input) {
+            case 1:
+                board[0][0] = player; 
                 break;
-            case "2":
-                board[0][1] = 'X';
+            case 2: 
+                board[0][1] = player; 
                 break;
-            case "3":
-                board[0][2] = 'X';
+            case 3: 
+                board[0][2] = player; 
+                break;
+            case 4: 
+                board[1][0] = player; 
+                break;
+            case 5: 
+                board[1][1] = player; 
+                break;
+            case 6: 
+                board[1][2] = player; 
+                break;
+            case 7: 
+                board[2][0] = player; 
+                break;
+            case 8: 
+                board[2][1] = player; 
+                break;
+            case 9: 
+                board[2][2] = player; 
                 break;
         }
-    
+    }
+
+    private static void printBoard(char[][] board) {
+        System.out.println(board[0][0] + " | " + board[0][1] + "| " + board[0][2]);
+        System.out.println("--+--+--");
+        System.out.println(board[1][0] + " | " + board[1][1] + "| " + board[1][2]);
+        System.out.println("--+--+--");
+        System.out.println(board[2][0] + " | " + board[2][1] + "| " + board[2][2]);
+    }
+
+    private static boolean win() {
+        for (int i = 0; i < 3; i++) {
+            if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) ||
+                (board[0][i] == player && board[1][i] == player && board[2][i] == player)) {
+                return true;
+            }
+        }
+        return (board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
+               (board[0][2] == player && board[1][1] == player && board[2][0] == player);
+    }
+
+    private static boolean draw() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == ' ') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        while (true) {
+            printBoard(board);
+            turn(board, scan);
+            if (win()) {
+                printBoard(board);
+                System.out.println("Player " + player + " wins!");
+                break;
+            }
+            if (draw()) {
+                printBoard(board);
+                System.out.println("It's a draw!");
+                break;
+            }
+            player = (player == 'X') ? 'O' : 'X';
+        }
+        scan.close();
     }
 }
