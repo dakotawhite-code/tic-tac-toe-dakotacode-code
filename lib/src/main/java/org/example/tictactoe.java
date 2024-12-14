@@ -11,6 +11,27 @@ public class tictactoe {
     };
     public static char player = 'X';
     public static Random random = new Random();
+    public static char p1mark;
+    public static char p2mark;
+
+    public static char custom(Scanner scan, String player) {
+        char mark;
+        while (true) {
+            System.out.print("Enter custom mark (single character) for " + player + ": ");
+            String input = scan.nextLine();
+            
+            if (input.length() == 1) {
+                mark = input.charAt(0);
+                if (!Character.isWhitespace(mark)) {
+                    return mark;
+                } else {
+                    System.out.println("Whitespace is not allowed as a mark. Please enter a valid character.");
+                }
+            } else {
+                System.out.println("Invalid input! Please enter exactly one character.");
+            }
+        }
+    }
 
     public static boolean validspace(int input) {
         return switch (input) {
@@ -47,7 +68,7 @@ public class tictactoe {
                     System.out.println("Invalid input! Please enter a number between 1 and 9.");
                     error = true;
                 }
-                scan.next();
+                scan.nextLine();
             }
         }
     }
@@ -112,7 +133,7 @@ public class tictactoe {
 
     public static boolean exitmenu(Scanner scan) {
         System.out.print("Do you want to play against your current opponent again? (y/n): ");
-        String response = scan.next().toLowerCase();
+        String response = scan.nextLine().toLowerCase();
         switch (response) {
             case "y" -> { System.out.println("Let's do it.");
                 return true; }
@@ -142,7 +163,7 @@ public class tictactoe {
             }
         } else {
             System.out.println("Invalid input! Please enter a number.");
-            scan.next();
+            scan.nextLine();
         }
         return mainmenu(scan);
     }
@@ -151,20 +172,26 @@ public class tictactoe {
         Scanner scan = new Scanner(System.in);
         boolean playing = true;
         int choice = mainmenu(scan);
-        
+
+        ////////////////////////
+        scan.nextLine();
+        p1mark = custom(scan, "Player 1");
+        p2mark = custom(scan, "Player 2");
+
+    
         while (playing) {
             board = new char[][]{{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
-            player = 'X';
+            player = p1mark;
             boolean isComputer = (choice == 2);
-
+    
             while (true) {
                 printBoard();
-                if (isComputer && player == 'O') {
+                if (isComputer && player == p2mark) {
                     computerturn();
                 } else {
                     turn(scan);
                 }
-
+    
                 if (win()) {
                     printBoard();
                     System.out.println("Player " + player + " wins!");
@@ -175,8 +202,9 @@ public class tictactoe {
                     System.out.println("It's a draw!");
                     break;
                 }
-                player = (player == 'X') ? 'O' : 'X';
+                player = (player == p1mark) ? p2mark : p1mark;
             }
+            scan.nextLine();
             playing = exitmenu(scan);
         }
         scan.close();
